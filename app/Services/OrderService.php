@@ -6,6 +6,8 @@ use App\Models\Order;
 use App\Models\Payment;
 use App\Models\Download;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\OrderSuccess;
 
 class OrderService
 {
@@ -88,6 +90,10 @@ class OrderService
                 'max_downloads' => null, // unlimited by default
             ]);
         }
+
+        // Send Success Email
+        $order->load(['user', 'items.product']);
+        Mail::to($order->user->email)->send(new OrderSuccess($order));
 
         return $order;
     }
