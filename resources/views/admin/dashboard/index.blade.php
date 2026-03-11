@@ -159,7 +159,7 @@
                 @endif
 
                 @if($openTickets > 0)
-                <a href="#" class="relative rounded-lg border border-yellow-200 dark:border-yellow-900/50 bg-yellow-50/50 dark:bg-yellow-900/20 px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-yellow-300 dark:hover:border-yellow-800 transition-colors">
+                <a href="{{ route('admin.support.index') }}" class="relative rounded-lg border border-yellow-200 dark:border-yellow-900/50 bg-yellow-50/50 dark:bg-yellow-900/20 px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-yellow-300 dark:hover:border-yellow-800 transition-colors">
                     <div class="flex-shrink-0">
                         <div class="h-10 w-10 rounded-full bg-yellow-100 dark:bg-yellow-800 flex items-center justify-center">
                             <span class="text-yellow-600 dark:text-yellow-300 font-bold">{{ $openTickets }}</span>

@@ -1,4 +1,46 @@
 @extends('layouts.app')
+@section('title', $product->title . ' - DigtafWare')
+
+@section('meta_description', Str::limit(strip_tags($product->description), 160))
+@section('meta_keywords', $product->category->name . ', ' . implode(', ', explode(' ', $product->title)))
+
+@section('og_type', 'product')
+@section('og_image', $product->thumbnail ? Storage::url($product->thumbnail) : asset('images/og-product.jpg'))
+
+@section('schema')
+<script type="application/ld+json">
+{
+    "@@context": "https://schema.org/",
+    "@@type": "Product",
+    "name": "{{ $product->title }}",
+    "image": [
+        "{{ $product->thumbnail ? Storage::url($product->thumbnail) : asset('images/og-product.jpg') }}"
+    ],
+    "description": "{{ strip_tags($product->description) }}",
+    "sku": "PROD-{{ $product->id }}",
+    "mpn": "{{ $product->id }}",
+    "brand": {
+        "@@type": "Brand",
+        "name": "DigtafWare"
+    },
+    @if($product->reviews()->count() > 0)
+    "aggregateRating": {
+        "@@type": "AggregateRating",
+        "ratingValue": "{{ $product->average_rating }}",
+        "reviewCount": "{{ $product->reviews()->count() }}"
+    },
+    @endif
+    "offers": {
+        "@@type": "Offer",
+        "url": "{{ url()->current() }}",
+        "priceCurrency": "IDR",
+        "price": "{{ $product->price }}",
+        "itemCondition": "https://schema.org/NewCondition",
+        "availability": "https://schema.org/InStock"
+    }
+}
+</script>
+@endsection
 
 @section('header', $product->title)
 
@@ -258,9 +300,15 @@
                                     Contact Sales
                                 </a>
                             @else
-                                <form action="{{ route('cart.add') }}" method="POST">
+                                <form action="{{ route('cart.add') }}" method="POST" class="space-y-4">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $product->id }}">
+                                    
+                                    <button type="submit" name="buy_now" value="1"
+                                        class="w-full bg-green-600 border border-transparent rounded-lg shadow-sm py-3 px-4 flex items-center justify-center text-base font-bold text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors">
+                                        Buy Now
+                                    </button>
+
                                     <button type="submit"
                                         class="w-full bg-indigo-600 border border-transparent rounded-lg shadow-sm py-3 px-4 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
                                         <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

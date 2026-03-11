@@ -41,4 +41,19 @@ class UserController extends Controller
 
         return back()->with('success', 'User suspended successfully.');
     }
+
+    public function updateRole(Request $request, User $user)
+    {
+        if ($user->id === auth()->id()) {
+            return back()->with('error', 'You cannot change your own role.');
+        }
+
+        $validated = $request->validate([
+            'role' => 'required|in:admin,user',
+        ]);
+
+        $user->update(['role' => $validated['role']]);
+
+        return back()->with('success', 'User role updated successfully.');
+    }
 }

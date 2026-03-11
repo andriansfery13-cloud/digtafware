@@ -13,7 +13,7 @@
                 @if($order->status == 'paid')
                     <span
                         class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-400">Paid</span>
-                @elseif($order->status == 'pending_payment')
+                @elseif($order->status == 'pending')
                     <span
                         class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-400">Pending
                         Payment</span>
@@ -28,9 +28,22 @@
                         class="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">{{ ucfirst($order->status) }}</span>
                 @endif
             </h2>
-            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Placed on
-                {{ $order->created_at->format('M d, Y, H:i A') }}
-            </p>
+            <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-2">
+                <p class="text-sm text-gray-500 dark:text-gray-400">Placed on
+                    {{ $order->created_at->format('M d, Y, H:i A') }}
+                </p>
+                @if($order->status === 'pending' && $expiresAt)
+                    <div
+                        class="flex items-center gap-1.5 text-sm font-medium text-orange-600 dark:text-orange-400 bg-orange-50 dark:bg-orange-900/20 px-2 py-0.5 rounded-md border border-orange-100 dark:border-orange-800/30">
+                        <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <span>Payment expires in: <span id="payment-countdown"
+                                data-expire="{{ $expiresAt->timestamp }}">--:--:--</span></span>
+                    </div>
+                @endif
+            </div>
         </div>
 
         @if($order->status == 'paid')
@@ -49,11 +62,14 @@
                     Go to Downloads
                 </a>
             </div>
-        @elseif($order->status == 'pending_payment')
-            <a href="{{ route('checkout.success', $order->id) }}"
-                class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
-                Complete Payment
-            </a>
+        @elseif($order->status == 'pending')
+            <form action="{{ route('dashboard.orders.repay', $order->id) }}" method="POST">
+                @csrf
+                <button type="submit"
+                    class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                    Pay Now
+                </button>
+            </form>
         @endif
     </div>
 
@@ -179,3 +195,41 @@
         </div>
     </div>
 @endsection
+
+@push('scripts')
+    <script>
+        (function() {
+            const countdownElement = document.getElementById('payment-countdown');
+            if (!countdownElement) return;
+
+            const expireTimestamp = parseInt(countdownElement.getAttribute('data-expire')) * 1000;
+
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = expireTimestamp - now;
+
+                if (distance <= 0) {
+                    countdownElement.innerHTML = "Expired";
+                    const parent = countdownElement.closest('div');
+                    if (parent) {
+                        parent.classList.remove('text-orange-600', 'bg-orange-50', 'dark:text-orange-400', 'dark:bg-orange-900/20');
+                        parent.classList.add('text-red-600', 'bg-red-50', 'dark:text-red-400', 'dark:bg-red-900/20');
+                    }
+                    return;
+                }
+
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdownElement.innerHTML = 
+                    String(hours).padStart(2, '0') + ":" + 
+                    String(minutes).padStart(2, '0') + ":" + 
+                    String(seconds).padStart(2, '0');
+            }
+
+            updateCountdown();
+            const timer = setInterval(updateCountdown, 1000);
+        })();
+    </script>
+@endpush

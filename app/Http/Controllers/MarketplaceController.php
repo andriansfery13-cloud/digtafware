@@ -24,8 +24,10 @@ class MarketplaceController extends Controller
         }
 
         // Filter by category
+        $selectedCategory = null;
         if ($request->filled('category')) {
             $query->where('category_id', $request->category);
+            $selectedCategory = Category::find($request->category);
         }
 
         // Sorting
@@ -52,6 +54,6 @@ class MarketplaceController extends Controller
 
         $products = $query->paginate(12)->withQueryString();
 
-        return view('marketplace.index', compact('products', 'categories'));
+        return view('marketplace.index', compact('products', 'categories', 'selectedCategory'));
     }
 }

@@ -7,6 +7,8 @@
 
     <title>Dashboard - {{ config('app.name', 'DigtafWare') }}</title>
 
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
 
@@ -18,9 +20,8 @@
         <!-- Sidebar -->
         <aside class="w-full md:w-64 bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 md:min-h-screen flex-shrink-0" x-data="{ open: false }">
             <div class="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-700">
-                <a href="{{ route('home') }}" class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">D</div>
-                    <span class="font-bold text-lg tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">DigtafWare</span>
+                <a href="{{ route('home') }}" class="flex items-center">
+                    <img src="{{ asset('assets/img/logo.png') }}" alt="DigtafWare Logo" class="h-10 w-auto dark:invert shadow-sm hover:scale-105 transition-transform duration-300">
                 </a>
                 <button @click="open = !open" class="md:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -144,5 +145,6 @@
             </div>
         </main>
     </div>
+    @stack('scripts')
 </body>
 </html>

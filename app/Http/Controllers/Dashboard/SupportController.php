@@ -48,12 +48,14 @@ class SupportController extends Controller
             ->with('success', 'Support ticket created successfully. We will reply shortly.');
     }
 
-    public function show(SupportTicket $ticket)
+    public function show(SupportTicket $support)
     {
-        if ($ticket->user_id !== auth()->id()) {
+        if ($support->user_id !== auth()->id()) {
             abort(403);
         }
 
-        return view('dashboard.support.show', compact('ticket'));
+        return view('dashboard.support.show', [
+            'ticket' => $support
+        ]);
     }
 }

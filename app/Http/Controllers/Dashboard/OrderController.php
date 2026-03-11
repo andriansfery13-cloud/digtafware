@@ -32,6 +32,22 @@ class OrderController extends Controller
             }
         ]);
 
-        return view('dashboard.orders.show', compact('order'));
+        $expiresAt = $order->status === 'pending' ? $order->created_at->addHours(4) : null;
+
+        return view('dashboard.orders.show', compact('order', 'expiresAt'));
+    }
+
+    public function repay(Order $order, \App\Services\MidtransService $midtransService)
+    {
+        if ($order->user_id !== auth()->id() || $order->status !== 'pending') {
+            abort(403);
+        }
+
+        if ($order->payment_method === 'midtrans') {
+            $snapToken = $midtransService->generateSnapToken($order);
+            return view('checkout.midtrans', compact('order', 'snapToken'));
+        }
+
+        return redirect()->route('checkout.manual', $order);
     }
 }

@@ -1,6 +1,11 @@
 @extends('layouts.app')
+@section('title', 'DigtafWare - Premium Digital Software & Script Marketplace')
+
+@section('meta_description', 'Discover high-quality software solutions, premium web templates, and powerful development tools. The best marketplace for digital products and scripts.')
+@section('meta_keywords', 'software marketplace, buy scripts, website templates, digital goods, web development tools')
 
 @section('header', 'Welcome')
+@section('og_type', 'website')
 
 @section('content')
     <!-- Hero Section -->

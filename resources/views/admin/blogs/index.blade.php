@@ -80,7 +80,9 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div class="flex justify-end gap-3 items-center">
-                                    <!-- <a href="{{ route('blogs.show', $blog->slug) }}" target="_blank" class="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300">View</a> -->
+                                    {{-- <a href="{{ route('blogs.show', $blog->slug) }}" target="_blank"
+                                        class="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-300">View</a>
+                                    --}}
                                     <a href="{{ route('admin.blogs.edit', $blog->id) }}"
                                         class="text-indigo-600 hover:text-indigo-900 dark:text-indigo-400 dark:hover:text-indigo-300">Edit</a>
                                     <form action="{{ route('admin.blogs.destroy', $blog->id) }}" method="POST"

@@ -30,7 +30,7 @@
                     @endif
                 </div>
                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                    Ticket #{{ $ticket->id }} &bull; Created {{ $ticket->created_at->format('M d, Y H:i') }}
+                    Ticket #{{ $ticket->id }} &bull; Created {{ $ticket->created_at?->format('M d, Y H:i') ?? 'N/A' }}
                     @if($ticket->order)
                         &bull; Order: <a href="{{ route('dashboard.orders.show', $ticket->order_id) }}"
                             class="text-indigo-600 hover:underline">#{{ $ticket->order->order_number }}</a>
@@ -68,10 +68,11 @@
                         <span class="font-medium text-gray-900 dark:text-white">{{ auth()->user()->name }} <span
                                 class="text-xs text-gray-500 font-normal"> (You)</span></span>
                         <span
-                            class="text-xs text-gray-500 dark:text-gray-400">{{ $ticket->created_at->diffForHumans() }}</span>
+                            class="text-xs text-gray-500 dark:text-gray-400">{{ $ticket->created_at?->diffForHumans() ?? 'long ago' }}</span>
                     </div>
                     <div class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap leading-relaxed">
-                        {{ $ticket->message }}</div>
+                        {{ $ticket->message }}
+                    </div>
                 </div>
             </div>
 
@@ -93,10 +94,11 @@
                             <span class="font-medium text-gray-900 dark:text-white">Support Team <span
                                     class="text-xs text-emerald-600 dark:text-emerald-400 font-bold ml-1 px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/50">Staff</span></span>
                             <span
-                                class="text-xs text-gray-500 dark:text-gray-400">{{ $ticket->updated_at->diffForHumans() }}</span>
+                                class="text-xs text-gray-500 dark:text-gray-400">{{ $ticket->updated_at?->diffForHumans() ?? 'just now' }}</span>
                         </div>
                         <div class="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap leading-relaxed">
-                            {{ $ticket->admin_reply }}</div>
+                            {{ $ticket->admin_reply }}
+                        </div>
                     </div>
                 </div>
             @else

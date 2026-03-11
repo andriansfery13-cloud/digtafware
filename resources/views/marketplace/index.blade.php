@@ -1,4 +1,22 @@
 @extends('layouts.app')
+@section('title')
+    @if(isset($selectedCategory))
+        {{ $selectedCategory->name }} Products - DigtafWare
+    @elseif(request('search'))
+        Search Results for "{{ request('search') }}" - DigtafWare
+    @else
+        Browse Premium Software & Scripts - DigtafWare
+    @endif
+@endsection
+
+@section('meta_description')
+    @if(isset($selectedCategory))
+        Browse our collection of premium software and scripts in the {{ $selectedCategory->name }} category.
+        {{ $selectedCategory->description ?? '' }}
+    @else
+        Discover the best premium software, scripts, and templates in our marketplace. Filter by category, price, or popularity.
+    @endif
+@endsection
 
 @section('header', 'Marketplace')
 
@@ -88,7 +106,8 @@
             <div class="flex-1">
                 <div class="mb-4 flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
                     <p>Showing <strong>{{ $products->firstItem() ?? 0 }} - {{ $products->lastItem() ?? 0 }}</strong> of
-                        <strong>{{ $products->total() }}</strong> results</p>
+                        <strong>{{ $products->total() }}</strong> results
+                    </p>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -117,7 +136,8 @@
                                         <a href="{{ route('products.show', $product->slug) }}">{{ $product->title }}</a>
                                     </h3>
                                     <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-4">
-                                        {{ $product->description }}</p>
+                                        {{ $product->description }}
+                                    </p>
                                 </div>
 
                                 <!-- Rating -->

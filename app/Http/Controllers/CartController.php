@@ -48,6 +48,10 @@ class CartController extends Controller
 
         $this->cartService->addItem($request->product_id);
 
+        if ($request->has('buy_now')) {
+            return redirect()->route('checkout.index');
+        }
+
         return back()->with('success', 'Product added to cart.');
     }
 

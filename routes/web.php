@@ -4,8 +4,13 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/p/{slug}', [\App\Http\Controllers\PageController::class, 'show'])->name('pages.show');
 Route::get('/marketplace', [\App\Http\Controllers\MarketplaceController::class, 'index'])->name('marketplace.index');
 Route::get('/products/{slug}', [\App\Http\Controllers\ProductDetailController::class, 'show'])->name('products.show');
+
+// Blog Routes
+Route::get('/blogs', [\App\Http\Controllers\BlogController::class, 'index'])->name('blogs.index');
+Route::get('/blogs/{slug}', [\App\Http\Controllers\BlogController::class, 'show'])->name('blogs.show');
 
 // Cart Routes
 Route::get('/cart', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
@@ -32,7 +37,7 @@ Route::middleware(['checkout'])->group(function () {
 });
 
 // Authenticated User Routes
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
 
     // User Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -45,6 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::get('/orders', [\App\Http\Controllers\Dashboard\OrderController::class, 'index'])->name('orders');
         Route::get('/orders/{order}', [\App\Http\Controllers\Dashboard\OrderController::class, 'show'])->name('orders.show');
+        Route::post('/orders/{order}/repay', [\App\Http\Controllers\Dashboard\OrderController::class, 'repay'])->name('orders.repay');
 
         Route::get('/downloads', [\App\Http\Controllers\Dashboard\DownloadController::class, 'index'])->name('downloads');
 
@@ -73,9 +79,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('users.index');
         Route::get('/users/{user}', [\App\Http\Controllers\Admin\UserController::class, 'show'])->name('users.show');
         Route::post('/users/{user}/suspend', [\App\Http\Controllers\Admin\UserController::class, 'suspend'])->name('users.suspend');
+        Route::post('/users/{user}/role', [\App\Http\Controllers\Admin\UserController::class, 'updateRole'])->name('users.role');
 
         Route::resource('blogs', \App\Http\Controllers\Admin\BlogController::class)->except(['show']);
         Route::resource('coupons', \App\Http\Controllers\Admin\CouponController::class)->except(['show', 'edit', 'update']);
+        Route::resource('pages', \App\Http\Controllers\Admin\PageController::class);
+        Route::resource('support', \App\Http\Controllers\Admin\SupportController::class)->only(['index', 'show', 'update']);
     });
 });
 

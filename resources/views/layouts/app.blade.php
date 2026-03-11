@@ -6,7 +6,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'DigtafWare') }} - Premium Software Marketplace</title>
+    <title>@yield('title', config('app.name', 'DigtafWare') . ' - Premium Software Marketplace')</title>
+
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description"
+        content="@yield('meta_description', 'Discover and buy premium digital software, scripts, templates, and plugins at DigtafWare.')">
+    <meta name="keywords"
+        content="@yield('meta_keywords', 'software marketplace, php scripts, website templates, app source code, digital products')">
+    <link rel="canonical" href="@yield('canonical', url()->current())">
+    <meta name="robots" content="@yield('meta_robots', 'index, follow')">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="@yield('og_type', 'website')">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="@yield('title', config('app.name', 'DigtafWare'))">
+    <meta property="og:description"
+        content="@yield('meta_description', 'Discover and buy premium digital software, scripts, templates, and plugins.')">
+    <meta property="og:image" content="@yield('og_image', asset('images/og-image.jpg'))">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="@yield('title', config('app.name', 'DigtafWare'))">
+    <meta property="twitter:description"
+        content="@yield('meta_description', 'Discover and buy premium digital software, scripts, templates, and plugins.')">
+    <meta property="twitter:image" content="@yield('og_image', asset('images/og-image.jpg'))">
+
+    <!-- Schema.org JSON-LD -->
+    @yield('schema')
+    <script type="application/ld+json">
+    {
+        "@@context": "https://schema.org",
+        "@@type": "Organization",
+        "name": "{{ config('app.name') }}",
+        "url": "{{ config('app.url') }}",
+        "logo": "{{ asset('images/logo.png') }}",
+        "sameAs": [
+            "https://twitter.com/digtafware",
+            "https://facebook.com/digtafware"
+        ]
+    }
+    </script>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -44,12 +86,9 @@
                 <!-- Logo & Primary Nav -->
                 <div class="flex items-center">
                     <div class="shrink-0 flex items-center">
-                        <a href="{{ route('home') }}" class="flex items-center gap-2">
-                            <div
-                                class="w-8 h-8 rounded bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
-                                D</div>
-                            <span
-                                class="font-bold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">DigtafWare</span>
+                        <a href="{{ route('home') }}" class="flex items-center">
+                            <img src="{{ asset('assets/img/logo.png') }}" alt="DigtafWare Logo"
+                                class="h-14 w-auto dark:invert shadow-sm hover:scale-105 transition-transform duration-300">
                         </a>
                     </div>
 
@@ -89,7 +128,7 @@
                                             src="{{ Storage::url(auth()->user()->avatar) }}" alt="{{ auth()->user()->name }}" />
                                     @else
                                         <div
-                                            class="h-6 w-6 rounded-full mr-2 bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center text-indigo-700 dark:text-indigo-300 font-bold text-xs">
+                                            class="h-6 w-6 rounded-full mr-2 bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-emerald-700 dark:text-emerald-300 font-bold text-xs">
                                             {{ substr(auth()->user()->name, 0, 1) }}
                                         </div>
                                     @endif
@@ -123,11 +162,11 @@
                         </x-dropdown>
                     @else
                         <a href="{{ route('login') }}"
-                            class="text-sm text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 font-medium transition-colors">Log
+                            class="text-sm text-gray-900 dark:text-gray-100 hover:text-emerald-600 dark:hover:text-emerald-400 font-semibold transition-colors">Log
                             in</a>
                         @if (Route::has('register'))
                             <a href="{{ route('register') }}"
-                                class="ml-4 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">Sign
+                                class="ml-4 inline-flex items-center justify-center px-5 py-2.5 border border-transparent rounded-xl shadow-lg text-sm font-bold text-white bg-emerald-600 hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all duration-200 transform hover:scale-105 active:scale-95 shadow-emerald-500/20">Sign
                                 up</a>
                         @endif
                     @endauth
@@ -239,6 +278,7 @@
         @endif
 
         @yield('content')
+        {{ $slot ?? '' }}
     </main>
 
     <!-- Footer -->
@@ -246,11 +286,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div class="col-span-1 md:col-span-1">
-                    <a href="{{ route('home') }}" class="flex items-center gap-2 mb-4">
-                        <div
-                            class="w-8 h-8 rounded bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
-                            D</div>
-                        <span class="font-bold text-xl tracking-tight text-gray-900 dark:text-white">DigtafWare</span>
+                    <a href="{{ route('home') }}" class="flex items-center mb-4">
+                        <img src="{{ asset('assets/img/logo.png') }}" alt="DigtafWare Logo"
+                            class="h-14 w-auto dark:invert">
                     </a>
                     <p class="text-gray-500 dark:text-gray-400 text-sm">
                         The premium digital software marketplace. Discover, buy, and sell top-tier code scripts,
@@ -278,13 +316,13 @@
                     <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">
                         Support</h3>
                     <ul class="space-y-3">
-                        <li><a href="#"
+                        <li><a href="{{ route('pages.show', 'documentation') }}"
                                 class="text-sm text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">Documentation</a>
                         </li>
                         <li><a href="{{ route('dashboard.support.create') }}"
                                 class="text-sm text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">Submit
                                 Ticket</a></li>
-                        <li><a href="#"
+                        <li><a href="{{ route('pages.show', 'faq') }}"
                                 class="text-sm text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">FAQ</a>
                         </li>
                     </ul>
@@ -294,13 +332,13 @@
                     <h3 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">Legal
                     </h3>
                     <ul class="space-y-3">
-                        <li><a href="#"
+                        <li><a href="{{ route('pages.show', 'terms-of-service') }}"
                                 class="text-sm text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">Terms
                                 of Service</a></li>
-                        <li><a href="#"
+                        <li><a href="{{ route('pages.show', 'privacy-policy') }}"
                                 class="text-sm text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">Privacy
                                 Policy</a></li>
-                        <li><a href="#"
+                        <li><a href="{{ route('pages.show', 'license-details') }}"
                                 class="text-sm text-gray-500 hover:text-indigo-600 dark:text-gray-400 dark:hover:text-indigo-400 transition-colors">License
                                 Details</a></li>
                     </ul>

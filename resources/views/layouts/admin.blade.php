@@ -7,6 +7,8 @@
 
     <title>Admin - {{ config('app.name', 'DigtafWare') }}</title>
 
+    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
 
@@ -27,9 +29,8 @@
         <!-- Sidebar -->
         <aside class="w-full md:w-64 bg-slate-900 border-r border-slate-800 md:min-h-screen flex-shrink-0" x-data="{ open: false }">
             <div class="flex items-center justify-between h-16 px-4 border-b border-slate-800">
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">D</div>
-                    <span class="font-bold text-lg tracking-tight text-white">Admin Panel</span>
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center">
+                    <img src="{{ asset('assets/img/logo.png') }}" alt="DigtafWare Admin" class="h-10 w-auto dark:invert shadow-sm hover:scale-105 transition-transform duration-300">
                 </a>
                 <button @click="open = !open" class="md:hidden p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none">
                     <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -81,6 +82,12 @@
                     </svg>
                     Users
                 </a>
+                <a href="{{ route('admin.support.index') }}" class="{{ request()->routeIs('admin.support.*') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors">
+                    <svg class="{{ request()->routeIs('admin.support.*') ? 'text-white' : 'text-slate-400 group-hover:text-slate-300' }} flex-shrink-0 -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    Support Tickets
+                </a>
                 
                 <p class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mt-6 mb-2">Content</p>
                 <a href="{{ route('admin.blogs.index') }}" class="{{ request()->routeIs('admin.blogs.*') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors">
@@ -88,6 +95,12 @@
                         <path stroke-linecap="round" stroke-linejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9.5a2.5 2.5 0 00-2.5-2.5H14" />
                     </svg>
                     Blog Posts
+                </a>
+                <a href="{{ route('admin.pages.index') }}" class="{{ request()->routeIs('admin.pages.*') ? 'bg-indigo-600 text-white' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }} group flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors">
+                    <svg class="{{ request()->routeIs('admin.pages.*') ? 'text-white' : 'text-slate-400 group-hover:text-slate-300' }} flex-shrink-0 -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    CMS Pages
                 </a>
 
                 <div class="pt-4 mt-6 border-t border-slate-800">
